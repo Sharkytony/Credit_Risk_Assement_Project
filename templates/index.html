@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Risk Assesment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            background-image: url('static/homepage_bg.png');
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .btn {
+            background-color: #007BFF;
+            color: #fff;
+            width: 200px; 
+            height: 60px; 
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="head" style=" text-align: center; font-size: 32px; color : white">
+        <p>Created by Anthony Rodrigues, Data Science Aspirant</p>
+    </div>
+    <div class="container">
+        <h1>Credit Risk Assesment</h1>
+        <form name="input-list" action="/preds" method="post">
+            <div class="input-group">
+                <label for="Age">Age:</label>
+                <input type="text" id="Age" name="Age" required>
+            </div>
+            <div class="input-group">
+                <label for="Income">Income(in dollars):</label>
+                    <input type="text" id="Income" name="Income" required>
+            </div>
+            <div class="input-group">
+                <label for="Home_Ownership">Home Ownership:</label>
+                <select id="Home_Ownership" name="Home_Ownership" required style="width: 250px; height: 40px; font-size: 16px;">
+                    <option value="Rent">Rent</option>
+                    <option value="Own">Own</option>
+                    <option value="Mortgage">Mortgage</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="Employment_Length">Employment Length:</label>
+                <input type="text" id="Employment Length" name="Employment Length" required>
+            </div>
+            <div class="input-group">
+                <label for="Loan_Purpose">Loan Purpose:</label>
+                <select id="Loan_Purpose" name="Loan_Purpose" required style="width: 250px; height: 40px; font-size: 16px;">
+                    <option value="Education">Education</option>
+                    <option value="HomeImprovement">Home Improvement</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Venture">Venture</option>
+                    <option value="DebtConsolidation">Debt Consolidation</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="Loan_Grade">Loan Grade:</label>
+                <select id="Loan_Grade" name="Loan_Grade" required style="width: 250px; height: 40px; font-size: 16px;">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="Loan_Amount">Loan Amount:</label>
+                <input type="text" id="Loan Amount" name="Loan Amount" required>
+            </div>
+            <div class="input-group">
+                <label for="Interest_Rate">Interest Rate (in %) :</label>
+                <input type="text" id="Interest Rate (in %) " name="Interest Rate (in %) " required>
+            </div>
+            <div class="input-group">
+                <label for="Loan_Income_ratio">Loan Income ratio (between 0 to 1):</label>
+                <input type="text" id="Loan Income ratio" name="Loan Income ratio" required>
+            </div>
+            <div class="input-group">
+                <label for="Default_in_History">Default in History:</label>
+                <select id="Default in History" name="Default in History" required style="width: 250px; height: 40px; font-size: 16px;">
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="Credit_History_Length">Credit History Length:</label>
+                <input type="text" id="Income" name="Credit History Length" required>
+            </div>
+            <div class="input-group">
+                <button class="btn" type="submit" style="font-size: 20px;">Predict</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
