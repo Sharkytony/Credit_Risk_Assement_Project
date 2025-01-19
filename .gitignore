@@ -1,4 +1,7 @@
+# Ignore files due to large size
+
 #virtual environment
 credit_risk_proj/
 
 # model
+ml_model/
