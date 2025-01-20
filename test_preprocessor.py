@@ -6,8 +6,8 @@ from sklearn.preprocessing import StandardScaler
 import joblib
 from sklearn.preprocessing import OneHotEncoder
 
-def col_renamer_for_df(data):
-    transformed_data = data.copy()
+def col_renamer_for_df(data): # Renaming columns
+    renamed_data = data.copy()
     new_column_names = {
         'person_age': 'Age',
         'person_income': 'Income',
@@ -22,8 +22,8 @@ def col_renamer_for_df(data):
         'cb_person_default_on_file': 'Default_in_History',
         'cb_person_cred_hist_length': 'Credit_History_Length'
     }
-    transformed_data.rename(columns=new_column_names, inplace=True)
-    return transformed_data
+    renamed_data.rename(columns=new_column_names, inplace=True)
+    return renamed_data
 
 
 def col_renamer_for_sip(data):#sip->single_input
