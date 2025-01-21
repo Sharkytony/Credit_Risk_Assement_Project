@@ -1,12 +1,19 @@
 import pandas as pd
-from sklearn.preprocessing import LabelEncoder
-import warnings
 import numpy as np
-from sklearn.preprocessing import StandardScaler
-import joblib
-from sklearn.preprocessing import OneHotEncoder
+import pickle
 
-def col_renamer_for_df(data): # Renaming columns
+# LOADING FILE CONTAINING DICTS TO IMPUTE MISSING VALUES AND HANDLE OUTLIERS
+with open('preprocessing_dicts/preprocessing_dicts.pkl', 'rb') as pickle_file:
+    loaded_dicts = pickle.load(pickle_file)
+
+
+def create_df(dict): # Creating a Dataframe
+    #sip->single_input
+    df = pd.DataFrame([dict])
+    return df
+
+
+def column_renamer(data): # Renaming columns
     renamed_data = data.copy()
     new_column_names = {
         'person_age': 'Age',
@@ -26,107 +33,65 @@ def col_renamer_for_df(data): # Renaming columns
     return renamed_data
 
 
-def col_renamer_for_sip(data):#sip->single_input
-    transformed_data = data.copy()
-    new_column_names = {
-        0 : 'Age',
-        1 : 'Income',
-        2 : 'Home_Ownership',
-        3 : 'Employment_Length',
-        4 : 'Loan_Purpose',
-        5 : 'Loan_Grade',
-        6 : 'Loan_Amount',
-        7 : 'Interest_Rate',
-        8 : 'Loan_Income_ratio', 
-        9 : 'Default_in_History',
-        10: 'Credit_History_Length'
-    }
-    transformed_data.rename(columns=new_column_names, inplace=True)
-    return transformed_data
+def null_filler(data, loaded_dicts=loaded_dicts): # Handling missing values
+    loan_grade_bounds, mean_dict = loaded_dicts[0], loaded_dicts[1]
 
-def null_filler(data):
-    cols = list(data.columns)
-    data_new = data.copy()
-    for col in cols:
-        if data[col].isnull().sum() > 0:
-            data_new[col] = data_new[col].fillna(data_new[col].mode()[0])
-            data_new.reset_index(drop=True , inplace=True)
-    return data_new
+    def impute_interest_rate(row):
+        if np.isnan(row['Interest_Rate']): 
+            grade = row['Loan_Grade']
+            if grade in loan_grade_bounds:
+                lb, ub = loan_grade_bounds[grade]
+                return round(np.random.uniform(lb, ub),2)  
+        return row['Interest_Rate']
 
-def one_hot_encode(input_data):
-    encoder = joblib.load('train_ohe.pkl')
-    ohe_data = encoder.transform(input_data[['Loan_Purpose', 'Home_Ownership']])
-    ohe_data = pd.DataFrame(ohe_data, columns=encoder.get_feature_names_out(['Loan_Purpose', 'Home_Ownership']))
+    data['Interest_Rate'] = data.apply(impute_interest_rate, axis=1)
+
+    for col in data.columns:
+        if data[col].isna().sum() > 0:
+            data[col] = data[col].fillna(mean_dict[col])
+
+    return data
+
+
+def encoding(data): # Encoding data
+    with open('feature_encoders/label_enc.pkl', 'rb') as pickle_file:
+        label_encoder = pickle.load(pickle_file)
+    with open('feature_encoders/one_hot_encoder.pkl', 'rb') as pickle_file:
+        one_hot_encoder = pickle.load(pickle_file)
+
+    # ONE HOT ENCODING
+    ohe_data = one_hot_encoder.transform(data[['Loan_Purpose', 'Home_Ownership']])
+    ohe_data = pd.DataFrame(ohe_data, columns=one_hot_encoder.get_feature_names_out(['Loan_Purpose',
+                                                                                      'Home_Ownership']))
     ohe_data = ohe_data.astype(int)
-    return ohe_data
 
-def label_encode(input_data, file='train_label_encoder.pkl'):
-    le = joblib.load('train_le.pkl')
-    transformed_data = input_data.copy()
-    transformed_data['Loan_Grade'] = le.transform(transformed_data['Loan_Grade'])
-    transformed_data['Default_in_History'] = transformed_data['Default_in_History'].map({'Y': 1, 'N': 0})
-    return transformed_data
+    # LABEL ENCODING
+    data['Loan_Grade']= label_encoder.transform(data['Loan_Grade'])
+    data['Default_in_History'] = data['Default_in_History'].map({'Y':1, 'N':0})
+    encoded_data = pd.merge(left=data.drop(['Home_Ownership', 'Loan_Purpose'], axis=1),
+                        right=ohe_data, left_index=True, right_index=True)
 
-def column_dropper(input_data, cols=['Loan_Purpose', 'Home_Ownership']):
-    transformed_data = input_data.drop(columns=cols)
-    return transformed_data
+    return encoded_data
 
-def df_merger(data1, data2):
-    transformed_data = pd.merge(left=data1, right=data2, left_index=True, right_index=True)
-    return transformed_data
 
-class OutlierHandler:
-    def __init__(self, data):
-        self.data = data
+def outlier_handling(data, loaded_dicts=loaded_dicts): # Handling outliers
+    feature_bounds = loaded_dicts[2]
+    for col in data.columns:
+        lb, ub = feature_bounds[col][0], feature_bounds[col][1]
+        data[col] = np.where(data[col] > ub, ub, data[col])
+        data[col] = np.where(data[col] < lb, lb, data[col])
+    return data
 
-    def outlier_counter(self, col):
-        q1 = np.percentile(col, 25)
-        q3 = np.percentile(col, 75)
-        iqr = q3 - q1
-        lower_bound = q1 - 1.5 * iqr
-        upper_bound = q3 + 1.5 * iqr
-        outliers = len(col[(col < lower_bound) | (col > upper_bound)])
-        return outliers, lower_bound, upper_bound
 
-    def outlier_capper(self, col_name, lower_bound, upper_bound):
-        self.data[col_name] = np.where(self.data[col_name] < lower_bound, lower_bound, self.data[col_name])
-        self.data[col_name] = np.where(self.data[col_name] > upper_bound, upper_bound, self.data[col_name])
+def column_dropper(data, cols=['Credit_History_Length', 'Interest_Rate']): # Dropping features causing multicollinearity
+    for col in cols:
+        if col in data.columns:
+            data = data.drop(columns=cols, axis=1)
+    return data
+ 
 
-    def outlier_handling(self, cols_to_handle=['Employment_Length', 'Interest_Rate', 'Loan_Income_ratio', 'Income',
-                                                  'Loan_Amount', 'Age']):
-        warnings.filterwarnings('ignore')
-        for col in cols_to_handle:
-            outliers, lb, ub = self.outlier_counter(self.data[col])
-            if outliers > 0:
-                self.outlier_capper(col, lb, ub)
-            else:
-                pass
-        return self.data
-
-def test_preprocess(test_data):
-    scaler = joblib.load('train_scaler.pkl')
-    if isinstance(test_data, pd.DataFrame):
-        data1 = col_renamer_for_df(test_data)
-        data2 = null_filler(data1)
-        data3, data4 = one_hot_encode(data2), label_encode(data2)
-        data5 = column_dropper(data4)
-        data6 = df_merger(data5, data3)
-        ol_handler = OutlierHandler(data6)
-        data7 = ol_handler.outlier_handling()
-        data7.columns = data7.columns.astype(str)
-        test_data_scaled = scaler.transform(data7)
-        return test_data_scaled
-    elif isinstance(test_data, list): #single input
-        data = pd.DataFrame([test_data])
-        data1 = col_renamer_for_sip(data)
-        data2 = null_filler(data1)
-        data3, data4 = one_hot_encode(data2), label_encode(data2)
-        data5 = column_dropper(data4)
-        data6 = df_merger(data5, data3)
-        ol_handler = OutlierHandler(data6)
-        data7 = ol_handler.outlier_handling()
-        data7.columns = data7.columns.astype(str)
-        test_data_scaled = scaler.transform(data7)
-        return test_data_scaled
-    else:
-        raise ValueError("Input must be a dataframe or a list of dataframes")
+def scaling(data):
+    with open('scalers/scaler.pkl', 'rb')as scaler :
+        scaler = pickle.load(scaler)
+    scaled_data = scaler.transform(data)
+    return scaled_data
