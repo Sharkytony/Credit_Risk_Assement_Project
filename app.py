@@ -1,18 +1,23 @@
 from flask import Flask, render_template, request, send_file
 import joblib
 import matplotlib.pyplot as plt
+from test_preprocessor import create_df, null_filler
 
 app = Flask(__name__, static_folder='static')
-test_preprocessing = joblib.load('test_preprocessor.pkl')
+# test_preprocessing = joblib.load('test_preprocessor.pkl')
+
 
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
-@app.route('/preds', methods=['GET', 'POST'])
 
+
+@app.route('/preds', methods=['GET', 'POST'])
 def prediction():
-    model_ = joblib.load('model.pkl')    
     new_input =request.form.to_dict()
+    df = null_filler(create_df(new_input))
+    
+    model_ = joblib.load('model.pkl')    
     new_input_l = list(new_input.values())
     for index, element in enumerate(new_input_l):
         if index != len(new_input_l)-2:
