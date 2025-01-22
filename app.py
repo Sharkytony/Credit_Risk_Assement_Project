@@ -1,10 +1,9 @@
 from flask import Flask, render_template, request, send_file
 import joblib
 import matplotlib.pyplot as plt
-from test_preprocessor import create_df, null_filler
+import test_preprocessor 
 
 app = Flask(__name__, static_folder='static')
-# test_preprocessing = joblib.load('test_preprocessor.pkl')
 
 
 @app.route('/', methods=['GET'])
@@ -14,27 +13,22 @@ def index():
 
 @app.route('/preds', methods=['GET', 'POST'])
 def prediction():
-    new_input =request.form.to_dict()
-    df = null_filler(create_df(new_input))
-    
-    model_ = joblib.load('model.pkl')    
-    new_input_l = list(new_input.values())
-    for index, element in enumerate(new_input_l):
-        if index != len(new_input_l)-2:
-            try :
-                element = int(element)
-            except Exception as ex:
-                element = str(element).upper()
-            finally:
-                new_input_l[index] = element
-        else:
-            if new_input_l[index] == 'Yes':
-                new_input_l[index] = 'Y'
-            else :
-                new_input_l[index] ='N'
 
-    processed_input = test_preprocessing.transform(new_input_l)
-    predictions = model_.predict_proba(processed_input)
+    data_dict = {
+        'person_age': int(request.form['person_age']),
+        'person_income': int(request.form['person_income']),
+        'person_home_ownership': request.form['person_home_ownership']  ,
+        'person_emp_length': int(request.form['person_emp_length']) ,
+        'loan_intent': request.form['loan_intent']  ,
+        'loan_grade': request.form['loan_grade'] ,
+        'loan_amnt': int(request.form['loan_amnt']) ,
+        'loan_int_rate': float(request.form['loan_int_rate']),
+        'loan_percent_income': float(request.form['loan_percent_income']) ,
+        'cb_person_default_on_file': request.form['cb_person_default_on_file'] ,
+        'cb_person_cred_hist_length': int(request.form['cb_person_cred_hist_length']) 
+    }
+
+    predictions = test_preprocessor.entire_pipeline(data_dict)
     predictions = predictions[0][1]
     labels = ['Wont Default', 'Will Default']
     sizes = [1 - predictions, predictions]
@@ -46,6 +40,7 @@ def prediction():
 
     plt.savefig('static/probability.png')
     return render_template('predictions_page.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
