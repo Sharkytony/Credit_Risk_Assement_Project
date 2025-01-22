@@ -45,6 +45,13 @@
             border-radius: 3px;
         }
 
+        input[type="number"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
         .btn {
             background-color: #007BFF;
             color: #fff;
@@ -72,40 +79,40 @@
         <h1>Credit Risk Assesment</h1>
         <form name="input-list" action="/preds" method="post">
             <div class="input-group">
-                <label for="Age">Age:</label>
-                <input type="text" id="Age" name="Age" required>
+                <label for="person_age">Age:</label>
+                <input type="number" id="person_age" name="person_age" required>
             </div>
             <div class="input-group">
-                <label for="Income">Income(in dollars):</label>
-                    <input type="text" id="Income" name="Income" required>
+                <label for="person_income">Income(in dollars):</label>
+                    <input type="text" id="person_income" name="person_income" required>
             </div>
             <div class="input-group">
-                <label for="Home_Ownership">Home Ownership:</label>
-                <select id="Home_Ownership" name="Home_Ownership" required style="width: 250px; height: 40px; font-size: 16px;">
-                    <option value="Rent">Rent</option>
-                    <option value="Own">Own</option>
-                    <option value="Mortgage">Mortgage</option>
-                    <option value="Other">Other</option>
+                <label for="person_home_ownership">Home Ownership:</label>
+                <select id="person_home_ownership" name="person_home_ownership" required style="width: 250px; height: 40px; font-size: 16px;">
+                    <option value="RENT">Rent</option>
+                    <option value="OWN">Own</option>
+                    <option value="MORTGAGE">Mortgage</option>
+                    <option value="OTHER">Other</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="Employment_Length">Employment Length:</label>
-                <input type="text" id="Employment Length" name="Employment Length" required>
+                <label for="person_emp_length">Employment Length:</label>
+                <input type="text" id="person_emp_length" name="person_emp_length" required>
             </div>
             <div class="input-group">
-                <label for="Loan_Purpose">Loan Purpose:</label>
-                <select id="Loan_Purpose" name="Loan_Purpose" required style="width: 250px; height: 40px; font-size: 16px;">
-                    <option value="Education">Education</option>
-                    <option value="HomeImprovement">Home Improvement</option>
-                    <option value="Medical">Medical</option>
-                    <option value="Personal">Personal</option>
-                    <option value="Venture">Venture</option>
-                    <option value="DebtConsolidation">Debt Consolidation</option>
+                <label for="loan_intent">Loan Purpose:</label>
+                <select id="loan_intent" name="loan_intent" required style="width: 250px; height: 40px; font-size: 16px;">
+                    <option value="EDUCATION">Education</option>
+                    <option value="HOMEIMPROVEMENT">Home Improvement</option>
+                    <option value="MEDICAL">Medical</option>
+                    <option value="PERSONAL">Personal</option>
+                    <option value="VENTURE">Venture</option>
+                    <option value="DEBTCONSOLIDATION">Debt Consolidation</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="Loan_Grade">Loan Grade:</label>
-                <select id="Loan_Grade" name="Loan_Grade" required style="width: 250px; height: 40px; font-size: 16px;">
+                <label for="loan_grade">Loan Grade:</label>
+                <select id="loan_grade" name="loan_grade" required style="width: 250px; height: 40px; font-size: 16px;">
                     <option value="A">A</option>
                     <option value="B">B</option>
                     <option value="C">C</option>
@@ -116,27 +123,27 @@
                 </select>
             </div>
             <div class="input-group">
-                <label for="Loan_Amount">Loan Amount:</label>
-                <input type="text" id="Loan Amount" name="Loan Amount" required>
+                <label for="loan_amnt">Loan Amount:</label>
+                <input type="text" id="loan_amnt" name="loan_amnt" required>
             </div>
             <div class="input-group">
-                <label for="Interest_Rate">Interest Rate (in %) :</label>
-                <input type="text" id="Interest Rate (in %) " name="Interest Rate (in %) " required>
+                <label for="loan_int_rate">Interest Rate (in %) :</label>
+                <input type="text" id="loan_int_rate" name="loan_int_rate" required>
             </div>
             <div class="input-group">
-                <label for="Loan_Income_ratio">Loan Income ratio (between 0 to 1):</label>
-                <input type="text" id="Loan Income ratio" name="Loan Income ratio" required>
+                <label for="loan_percent_income">Loan Income ratio (between 0 to 1):</label>
+                <input type="text" id="loan_percent_income" name="loan_percent_income" required>
             </div>
             <div class="input-group">
-                <label for="Default_in_History">Default in History:</label>
-                <select id="Default in History" name="Default in History" required style="width: 250px; height: 40px; font-size: 16px;">
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
+                <label for="cb_person_default_on_file">Default in History:</label>
+                <select id="cb_person_default_on_file" name="cb_person_default_on_file" required style="width: 250px; height: 40px; font-size: 16px;">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="Credit_History_Length">Credit History Length:</label>
-                <input type="text" id="Income" name="Credit History Length" required>
+                <label for="cb_person_cred_hist_length">Credit History Length:</label>
+                <input type="text" id="cb_person_cred_hist_length" name="cb_person_cred_hist_length" required>
             </div>
             <div class="input-group">
                 <button class="btn" type="submit" style="font-size: 20px;">Predict</button>
