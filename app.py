@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, send_file
 import joblib
 import matplotlib.pyplot as plt
-import test_preprocessor 
+import time
 
 app = Flask(__name__, static_folder='static')
 
@@ -10,7 +10,8 @@ app = Flask(__name__, static_folder='static')
 def index():
     return render_template('index.html')
 
-
+import test_preprocessor #lazy loading
+ 
 @app.route('/preds', methods=['GET', 'POST'])
 def prediction():
 
@@ -27,7 +28,7 @@ def prediction():
         'cb_person_default_on_file': request.form['cb_person_default_on_file'] ,
         'cb_person_cred_hist_length': int(request.form['cb_person_cred_hist_length']) 
     }
-
+    start = time.time()
     predictions = test_preprocessor.entire_pipeline(data_dict)
     predictions = predictions[0][1]
     labels = ['Wont Default', 'Will Default']
@@ -39,6 +40,8 @@ def prediction():
     plt.axis('equal') 
 
     plt.savefig('static/probability.png')
+    time_taken = time.time() - start
+    print('Time taken : ', time_taken)
     return render_template('predictions_page.html')
 
 
