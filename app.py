@@ -28,6 +28,7 @@ def prediction():
         'cb_person_default_on_file': request.form['cb_person_default_on_file'] ,
         'cb_person_cred_hist_length': int(request.form['cb_person_cred_hist_length']) 
     }
+    
     start = time.time()
     predictions = test_preprocessor.entire_pipeline(data_dict)
     predictions = predictions[0][1]
