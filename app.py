@@ -24,7 +24,7 @@ def prediction():
         'loan_grade': request.form['loan_grade'] ,
         'loan_amnt': int(request.form['loan_amnt']) ,
         'loan_int_rate': float(request.form['loan_int_rate']),
-        'loan_percent_income': float(request.form['loan_percent_income']) ,
+        'loan_percent_income': float(request.form['loan_amnt'])/float(request.form['person_income']) ,
         'cb_person_default_on_file': request.form['cb_person_default_on_file'] ,
         'cb_person_cred_hist_length': int(request.form['cb_person_cred_hist_length']) 
     }
