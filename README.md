@@ -1,115 +1,137 @@
-<pre><h1>Project Documentation: Credit Risk Assessment
-Author: Anthony Rodrigues</h1></pre>
+# Credit Risk Assessment 💵✔️ - Supervised ML
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Flask](https://img.shields.io/badge/Flask-3.0+-green.svg)](https://flask.palletsprojects.com/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5+-red.svg)](https://scikit-learn.org/)
 
-<h2>Section 1: Data Preparation and Exploration</h2>
+## Overview 🔎
+This project is a machine learning-based web application for assessing credit risk. It utilizes a comprehensive data preprocessing pipeline and advanced machine learning algorithms to classify loan applications based on the likelihood of default. The application is built using Python, Flask for the web interface, and scikit-learn for the machine learning model.
 
-<h3>1.1 Data Ingestion and Library Setup</h3>
-<ul>
-  <li>Importing Data</li>
-  <li>Preprocessing Libraries</li>
-  <li>Statistical Libraries</li>
-  <li>Visualization Libraries</li>
-</ul>
+## Aim 🎯
+- Accurately classify loan applicants into risk categories (low, medium, or high risk).
+- Provide insights into factors affecting creditworthiness.
+- Support financial institutions in making informed lending decisions.
+- Create a scalable, interpretable, and robust credit risk assessment system.
 
-<h3>1.2 Exploratory Data Analysis (EDA)</h3>
-<ul>
-  <li>EDA Tool</li>
-  <li>Statistical Data Overview</li>
-  <ul>
-    <li>Mean, Median, Standard Deviation, Variance</li>
-  </ul>
-  <li>Data Visualization</li>
-  <ul>
-    <li>Histograms</li>
-    <li>Correlation Matrix Heatmap</li>
-    <li>Parallel Plot</li>
-    <li>Pairplot</li>
-  </ul>
-</ul>
+### Terminal logging
+<img src="https://github.com/anthonyrodrigues443/Credit_Risk_Assement_Project/blob/main/web_page_images/terminal_logs.png" width="400px"><img src="https://github.com/anthonyrodrigues443/Credit_Risk_Assement_Project/blob/main/web_page_images/terminal_logs2.png" width="400px"><img src="https://github.com/anthonyrodrigues443/Credit_Risk_Assement_Project/blob/main/web_page_images/terminal_logs3.png" width="400px">
 
-<h2>Section 2: Data Cleaning and Preprocessing</h2>
+### Webpage
+<img src="https://github.com/anthonyrodrigues443/Credit_Risk_Assement_Project/blob/main/web_page_images/web_1.png" width="400px"><img src="https://github.com/anthonyrodrigues443/Credit_Risk_Assement_Project/blob/main/web_page_images/web_2.png" width="400px">
 
-<h3>2.1 Handling Data Quality Issues</h3>
-<ul>
-  <li>Duplicate Handling</li>
-  <li>Handling Constant Columns</li>
-  <li>Handling Missing Values (Pandas-Profiling)</li>
-</ul>
+### Output page
+<img src="https://github.com/anthonyrodrigues443/Credit_Risk_Assement_Project/blob/main/web_page_images/web_op.png" width="400px">
+  
+## Project Structure 🗂️
+```
+Credit_Risk_Assesment_Project/
+├── credit_risk_proj/         # python env
+├── dataset/                  # dataset
+├── eda_reports/              # Exploratory Data Analysis reports
+├── feature_encoders/         # Saved encoders for categorical features
+├── ml_model/                 # Trained machine learning voting classifier(lgbm+xgb) model
+├── plotly_graphs/            # Interactive visualizations
+├── preprocessing_dicts/      # Preprocessing configurations
+├── scalers/                  # Feature scaler
+├── static/                   # Static files (web bg images)
+├── templates/                # HTML templates(home page and prediction page) for Flask
+├── web_page_images/          # Images of web page and terminal logging
+├── app.py                    # Flask application entry point
+├── credit_risk_assesment.ipynb # Jupyter Notebook for model building
+├── requirements.txt          # Python dependencies
+├── test_preprocessor.py      # test data preprocessing pipeline
+```
 
-<h3>2.2 Data Transformation</h3>
-<ul>
-  <li>One-Hot Encoding for Cardinal Features</li>
-  <li>Label Encoding for Ordinal Features</li>
-  <li>Merging Dataframes</li>
-</ul>
+## Features ⭐
+- Comprehensive preprocessing pipeline:
+  - Missing value treatment
+  - Categorical feature encoding
+  - Numerical feature scaling
+  - Handling outliers
+- Machine learning model for credit risk classification:
+  - Voting Classifier consisting - Light Gradient Boosting Machine and XBG Classifier
+- Interactive web interface for:
+  - Inputting applicant details
+  - Displaying risk prediction results
 
-<h3>2.3 Outlier Detection and Treatment</h3>
-<ul>
-  <li>Identifying Gaussian and Skewed Distributions</li>
-  <li>Outlier Detection using IQR and Percentile Methods</li>
-  <li>Trimming and Capping Outliers</li>
-</ul>
+## Installation 🧑‍🔧
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Sharkytony/Credit_Risk_Assement_Project.git
+   cd Credit_Risk_Assement_Project
+   ```
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate # On Windows: venv\Scripts\activate
+   ```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-<h3>2.4 Data Balancing</h3>
-<ul>
-  <li>Downsampling Majority Class</li>
-  <li>Upsampling Minority Class</li>
-  <li>Merging Balanced Data</li>
-  <li>Feature Scaling using StandardScaler</li>
-  <li>Dimensionality Reduction</li>
-</ul>
+## Usage 👨🏻‍💻
+1. Start the Flask application:
+   ```bash
+   python app.py
+   ```
+2. Open your web browser and navigate to `http://localhost:5000`.
+3. Enter applicant details in the provided form.
+4. View the predicted credit risk category and supporting visualizations.
 
-<h2>Section 3: Model Development</h2>
+## Data Preprocessing Pipeline ⛓️
+- **Handling Multicollinearity:**
+  - Debt-to-Income Ratio calculation
+  - Credit History length extraction
+- **Encoding:**
+  - One-hot encoding for cardinal features
+  - Label encoding for ordinal features
+- **Scaling:**
+  - Standard scaling for numerical features
+- **Outlier Handling:**
+  - Winsorization for extreme values
 
-<h3>3.1 Data Splitting and Cross-Validation</h3>
-<ul>
-  <li>Stratified K-Fold Cross-Validation</li>
-  <li>Train-Test Split</li>
-</ul>
+### Example Usage:
+```python
+import pipeline
 
-<h3>3.2 Model Selection and Training</h3>
-<ul>
-  <li>Boosting Models</li>
-  <li>Bayesian Models</li>
-  <li>K-Nearest Neighbors (KNN)</li>
-  <li>Logistic Regression</li>
-  <li>Fitting and Training Models</li>
-</ul>
+# Create input DataFrame
+predictions = pipeline.entire_pipeline(
+    age=35, income=50000, credit_score=700, loan_amount=20000, ...
+)
+# Predict risk
+print(predictions)
 
-<h3>3.3 Hyperparameter Tuning</h3>
-<ul>
-  <li>Pruning Decision Trees</li>
-  <li>Visualizing Pruning</li>
-  <li>Model Tuning (GridSearchCV)</li>
-</ul>
+# Output Format :
+# [ probability for class 0, probability for class 1]
+```
 
-<h3>3.4 Model Evaluation</h3>
-<ul>
-  <li>Plotting Evaluation Scores</li>
-</ul>
+## Model Details 🤖
+- Algorithms Used:
+  - XGB Classifier (baseline)
+  - LGBM Classifier (baseline)
+  - Voting Classifier
+- Evaluation Metrics:
+  - Specificity, Recall
+  - ROC-AUC for model comparison
+- Hyperparameter Tuning
 
-<h3>3.5 Ensemble Models</h3>
-<ul>
-  <li>Stacking Classifier</li>
-  <li>Voting Classifier</li>
-</ul>
+## Contributing 🤝
+1. Fork the repository.
+2. Create a new feature branch:
+   ```bash
+   git checkout -b feature/AmazingFeature
+   ```
+3. Commit your changes:
+   ```bash
+   git commit -m 'Add some AmazingFeature'
+   ```
+4. Push to the branch:
+   ```bash
+   git push origin feature/AmazingFeature
+   ```
+5. Open a pull request.
 
-<h2>Section 4: Pipeline Creation</h2>
+## License 📋
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/Sharkytony/Credit_Risk_Assement_Project/blob/main/LICENSE) file for more details.
 
-<h3>4.1 Preprocessing Pipeline</h3>
-<ul>
-  <li>Preprocessor Functions (preprocessor.py)</li>
-  <li>Training Preprocessor Pipeline (train_preprocessor.pkl)</li>
-</ul>
-
-<h3>4.2 Testing Pipeline</h3>
-<ul>
-  <li>Testing Preprocessor Functions (test_preprocessor.py)</li>
-  <li>Testing Preprocessor Pipeline (test_preprocessor.pkl)</li>
-</ul>
-
-<h3>4.3 Model Pipeline</h3>
-<ul>
-  <li>Building and Saving Model Pipeline (model.pkl)</li>
-  <li>Applying Pipelines for Fitting, Training, and Evaluation</li>
-</ul>
+<h3>⭐ Don't forget to star the repository if you find it helpful!
